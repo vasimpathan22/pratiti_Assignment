@@ -48,8 +48,8 @@ public class BookController {
     }
 
     @PutMapping("/updateBook")
-    public String updateBook(@RequestBody BookDTO bookDto){
-        return bookService.updateBook(bookDto);
+    public ResponseEntity<String> updateBook(@RequestBody BookDTO bookDto){
+        return ResponseEntity.status(HttpStatus.OK).body(bookService.updateBook(bookDto));
     }
 
     @GetMapping("/getBooksByTitle/{title}")
