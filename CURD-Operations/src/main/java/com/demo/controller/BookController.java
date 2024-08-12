@@ -16,6 +16,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/library")
+@Validated
 public class BookController {
 
     @Autowired
@@ -28,12 +29,13 @@ public class BookController {
     }
 
     @PostMapping("/addBook")
-    public ResponseEntity<String> createBook(@Valid @RequestBody BookDTO bookDto , BindingResult bindingResult){
+    public ResponseEntity<String> createBook(@Valid @RequestBody BookDTO book , BindingResult bindingResult){
 
         if(bindingResult.hasErrors()){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Validation Failed");
         }
-        bookService.createBook(bookDto);
+
+        bookService.createBook(book);
 
         return ResponseEntity.status(HttpStatus.OK).body("Book Saved");
     }
@@ -61,6 +63,11 @@ public class BookController {
     @GetMapping("/getBooksByTitle/{title}")
     public List<BookEntity> getBooksByTitle(@PathVariable String title){
         return bookService.getBooksByTitle(title);
+    }
+
+    @GetMapping("/getBooksByPagination/{pageNo}")
+    public List<BookDTO> getDataByPaginationAndSorting(@PathVariable Integer pageNo){
+        return bookService.getDataByPaginationAndSorting(pageNo);
     }
 
 }

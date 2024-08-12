@@ -6,6 +6,9 @@ import com.demo.repository.BookRepository;
 import com.demo.entity.BookEntity;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,7 +41,7 @@ public class BookService {
 
        return bookEntities.stream()
                 .map(bookEntity->mapper.map(bookEntity,BookDTO.class))
-                .collect(Collectors.toList());
+                .toList();
 
     }
 
@@ -64,5 +67,17 @@ public class BookService {
         return bookRepository.getBooksByTitle(title);
     }
 
+
+    public List<BookDTO> getDataByPaginationAndSorting(Integer pageNo){
+
+        Pageable pageWithTenElements= PageRequest.of(pageNo,10, Sort.by("bookId"));
+
+        return bookRepository.findAll(pageWithTenElements).getContent()
+                .stream()
+                .map(bookEntity->mapper.map(bookEntity,BookDTO.class))
+                .toList();
+
+
+    }
 
 }

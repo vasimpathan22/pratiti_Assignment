@@ -22,7 +22,7 @@ public class BookEntity {
     @NotNull(message = "Book Title can Not be null")
     private String bookName;
 
-    @Size(min=10, max=40,message = "Book description must be between 10 and 40 characters")
+    @Size(min=10, max=65,message = "Book description must be between 10 and 40 characters")
     private String bookDescription;
 
     @DecimalMax(value = "1200.00" , message = "Book prize should not be greater than 1200.00")
