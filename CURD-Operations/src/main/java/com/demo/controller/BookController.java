@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +16,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/library")
-@Validated
 public class BookController {
 
     @Autowired
@@ -28,8 +28,14 @@ public class BookController {
     }
 
     @PostMapping("/addBook")
-    public ResponseEntity<BookDTO> createBook(@Valid @RequestBody BookDTO bookDto){
-        return ResponseEntity.status(HttpStatus.OK).body(bookService.createBook(bookDto));
+    public ResponseEntity<String> createBook(@Valid @RequestBody BookDTO bookDto , BindingResult bindingResult){
+
+        if(bindingResult.hasErrors()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Validation Failed");
+        }
+        bookService.createBook(bookDto);
+
+        return ResponseEntity.status(HttpStatus.OK).body("Book Saved");
     }
 
     @GetMapping("/getBookById/{bookId}")
