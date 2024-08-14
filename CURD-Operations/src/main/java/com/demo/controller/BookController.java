@@ -4,6 +4,7 @@ import com.demo.dto.BookDTO;
 import com.demo.entity.BookEntity;
 import com.demo.service.BookService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +18,11 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/library")
 @Validated
+@RequiredArgsConstructor
 public class BookController {
 
-    @Autowired
-    private BookService bookService;
+
+    private final BookService bookService;
 
 
     @GetMapping("/hello")
@@ -41,8 +43,9 @@ public class BookController {
     }
 
     @GetMapping("/getBookById/{bookId}")
-    public Optional<BookEntity> getBookById(@PathVariable Integer bookId){
-        return bookService.getBookById(bookId);
+    public ResponseEntity<Optional<BookEntity>> getBookById(@PathVariable Integer bookId){
+        return ResponseEntity.status(HttpStatus.OK).body(bookService.getBookById(bookId));
+
     }
 
     @GetMapping("getAllBooks")

@@ -4,8 +4,8 @@ package com.demo.service;
 import com.demo.dto.BookDTO;
 import com.demo.repository.BookRepository;
 import com.demo.entity.BookEntity;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -15,19 +15,20 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class BookService {
 
-    @Autowired
-    public BookRepository bookRepository;
 
-    @Autowired
-    public ModelMapper mapper;
+    public final BookRepository bookRepository;
+
+
+    public final ModelMapper mapper;
 
 
     public BookDTO createBook(BookDTO bookDto){
         BookEntity book=mapper.map(bookDto,BookEntity.class);
 
-        return mapper.map(bookRepository.save(book),BookDTO.class);
+        return mapper.map(bookRepository.save(book), BookDTO.class);
     }
 
     public Optional<BookEntity> getBookById(Integer id){
